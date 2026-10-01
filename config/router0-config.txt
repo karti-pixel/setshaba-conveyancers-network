@@ -1,0 +1,55 @@
+hostname Router0
+!
+interface g0/0
+ no shutdown
+interface g0/0.10
+ encapsulation dot1Q 10
+ ip address 10.34.10.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+interface g0/0.20
+ encapsulation dot1Q 20
+ ip address 10.34.20.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+interface g0/0.30
+ encapsulation dot1Q 30
+ ip address 10.34.30.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+interface g0/0.40
+ encapsulation dot1Q 40
+ ip address 10.34.40.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+interface g0/0.50
+ encapsulation dot1Q 50
+ ip address 10.34.50.1 255.255.255.0
+ ip nat inside
+interface g0/0.60
+ encapsulation dot1Q 60
+ ip address 10.34.60.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+ ip access-group GUEST-IN in
+interface g0/0.70
+ encapsulation dot1Q 70
+ ip address 10.34.70.1 255.255.255.0
+ ip helper-address 10.34.50.10
+ ip nat inside
+ ip access-group CR14-BUSINESS-HOURS in
+interface g0/0.99
+ encapsulation dot1Q 99 native
+!
+interface g0/1
+ ip address 203.0.113.2 255.255.255.252
+ ip nat outside
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+access-list 1 permit 10.34.0.0 0.0.255.255
+ip nat inside source list 1 interface g0/1 overload
+!
+! GUEST-IN, CR14-AFTER-HOURS and CR14-BUSINESS-HOURS: see section 4
+!
+! SSH baseline (see A.4)
