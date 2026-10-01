@@ -1,0 +1,39 @@
+# 01 - Client Requirements
+
+| Item | Detail |
+| --- | --- |
+| Project ID | CMPG325-2026-081 |
+| Client ID | CLI-081 |
+| Organisation | Setshaba Conveyancers (Potchefstroom), Legal Services |
+| Site | Single office |
+| Address block | 10.34.0.0/16 |
+
+## Functional groups
+
+| Group | VLAN | Wired/wireless |
+| --- | --- | --- |
+| Management | 10 | Wired |
+| Conveyancing | 20 | Wired |
+| Admin/Finance | 30 | Wired |
+| Reception | 40 | Wired |
+| Servers | 50 | Wired |
+| Guest Wi-Fi | 60 | Wireless |
+| Contractor Wi-Fi (CR14) | 70 | Wireless |
+
+## Requirements
+
+| # | Requirement | Met by |
+| --- | --- | --- |
+| R1 | Connectivity and network services for a small legal office (management, conveyancing, admin/finance, reception, server) | VLANs 10-50, router-on-a-stick, DHCP/DNS server, NAT |
+| R2 | Guest users must not reach internal resources | `GUEST-IN` ACL on Gi0/0.60 |
+| R3 | CR14: limited after-hours wireless access for cleaning and security contractors | VLAN 70, two-state ACL and AP-port control |
+| R4 | Secure device management (SSH) instead of Telnet | SSH v2, RSA 2048, local auth, SSH-only vty restricted to VLAN 10 |
+| R5 | Working, testable Packet Tracer implementation with documented evidence | `.pkt` file, `config/`, `evidence/` |
+
+## Assigned challenge
+
+Secure device management plane (SSH), intermediate difficulty.
+
+## Change request CR14
+
+Limited wireless access for cleaning and security contractors, after hours only. See `05-cr14-design.md`.
