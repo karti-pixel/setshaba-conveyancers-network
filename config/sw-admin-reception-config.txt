@@ -1,0 +1,25 @@
+hostname SW-admin-Reception
+vlan 10
+ name MANAGEMENT
+vlan 30
+ name ADMIN-FINANCE
+vlan 40
+ name RECEPTION
+vlan 99
+ name NATIVE
+interface f0/24
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,30,40,99
+interface range f0/1-10
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+interface range f0/11-20
+ switchport mode access
+ switchport access vlan 40
+ spanning-tree portfast
+interface vlan 10
+ ip address 10.34.10.3 255.255.255.0
+ no shutdown
+ip default-gateway 10.34.10.1
