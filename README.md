@@ -34,24 +34,30 @@ The `10.34.0.0/16` address space is subnetted using VLSM into `/24` networks map
 ## Repository Structure
 ```text
 setshaba-conveyancers-network/
-├── README.md                           <- You are here
-├── docs/                               <- Milestone 1 Design Documentation
-│   ├── 01-client-requirements.md
-│   ├── 02-physical-topology.png
-│   ├── 03-logical-topology.png
-│   └── 04-ip-addressing-plan.md
-├── packet-tracer/                      <- Simulation files
-│   └── setshaba-conveyancers-network.pkt
-├── config/                             <- Device configurations
-│   ├── router0-config.txt
-│   └── switch0-config.txt
-├── evidence/                           <- Testing and Verification
-│   ├── testing-and-connectivity/
-│   ├── configuration-screenshots/
-│   ├── troubleshooting-log.md
-│   └── project-reflection.md
-└── video/
-    └── demo-link.md
+|-- README.md
+|-- docs/
+|   |-- 01-client-requirements.md
+|   |-- 02-physical-topology.png
+|   |-- 03-logical-topology.png
+|   |-- 04-ip-addressing-plan.md
+|   |-- 05-cr14-design.md
+|-- packet-tracer/
+|   |-- setshaba-conveyancers-network.pkt
+|-- config/
+|   |-- router0-config.txt
+|   |-- switch0-config.txt
+|   |-- sw-conveyancing-config.txt
+|   |-- sw-admin-reception-config.txt
+|   |-- sw-servers-config.txt
+|   |-- isp-config.txt
+|   |-- cr14-after-hours.txt
+|   |-- cr14-business-hours.txt
+|-- evidence/
+|   |-- screenshots/   (T1 to T13)
+|   |-- testing/
+|-- video/
+|   |-- demo-link.md
+
 ```
 
 ## Milestones
@@ -60,3 +66,5 @@ setshaba-conveyancers-network/
 * **Final Submission:** Full working network & demonstration (16 October 2026)
 
 ---
+
+
