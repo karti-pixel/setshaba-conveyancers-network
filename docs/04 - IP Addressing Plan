@@ -1,0 +1,47 @@
+# 04 - IP Addressing Plan
+
+One /24 per VLAN from 10.34.0.0/16. Router0 sub-interfaces (Gi0/0.x) are the .1 gateway of each subnet.
+
+| VLAN | Name | Subnet | Gateway | DHCP range |
+| --- | --- | --- | --- | --- |
+| 10 | Management | 10.34.10.0/24 | 10.34.10.1 | .21 onward |
+| 20 | Conveyancing | 10.34.20.0/24 | 10.34.20.1 | .21 onward |
+| 30 | Admin/Finance | 10.34.30.0/24 | 10.34.30.1 | .21 onward |
+| 40 | Reception | 10.34.40.0/24 | 10.34.40.1 | .21 onward |
+| 50 | Servers | 10.34.50.0/24 | 10.34.50.1 | Static (server 10.34.50.10) |
+| 60 | Guest Wi-Fi | 10.34.60.0/24 | 10.34.60.1 | .21 onward |
+| 70 | Contractor Wi-Fi (CR14) | 10.34.70.0/24 | 10.34.70.1 | .21 onward |
+| 99 | Native/trunk | 10.34.99.0/24 | None | No hosts |
+
+DHCP starts at .21 so the static management addresses never collide with client leases.
+
+## WAN and simulated internet
+
+| Link | Subnet | Addresses |
+| --- | --- | --- |
+| Router0 Gi0/1 to ISP Gi0/0 | 203.0.113.0/30 | Router0 .2, ISP .1 |
+| ISP Gi0/1 to Internet-Server | 8.8.8.0/24 | ISP 8.8.8.1, Internet-Server 8.8.8.8 |
+
+## Management IPs (VLAN 10)
+
+| Device | Management IP |
+| --- | --- |
+| Router0 | 10.34.10.1 (Gi0/0.10) |
+| Switch0 | 10.34.10.2 (SVI VLAN 10) |
+| SW-Conveyancing | 10.34.10.3 |
+| SW-Admin-Reception | 10.34.10.4 |
+| SW-Servers | 10.34.10.5 |
+
+## DNS
+
+- Wired VLANs 10-40: 10.34.50.10 (internal server).
+- Guest and contractor VLANs: 8.8.8.8.
+
+## Trunks (802.1Q, native VLAN 99)
+
+| Trunk | Allowed VLANs |
+| --- | --- |
+| Switch0 to Router0 | 10, 20, 30, 40, 50, 60, 70, 99 |
+| Switch0 to SW-Conveyancing | 10, 20, 99 |
+| Switch0 to SW-Admin-Reception | 10, 30, 40, 99 |
+| Switch0 to SW-Servers | 10, 50, 99 |
