@@ -1,0 +1,72 @@
+# 05 - CR14 Design: After-Hours Contractor Access
+
+## Requirement
+
+Limited wireless access for cleaning and security contractors, after hours only.
+
+## Design decision
+
+Milestone 1 proposed a time-based ACL. The Packet Tracer IOS used does not reliably support `time-range`, `periodic` or `kron`, so the design uses two pre-staged states switched by a documented procedure. VLAN 70 keeps its own subnet (10.34.70.0/24), SSID (Contractor-CR14) and ACL treatment.
+
+| State | Router0: inbound ACL on Gi0/0.70 | Switch0 Fa0/6 (AP-Contractor) | Result |
+| --- | --- | --- | --- |
+| BUSINESS-HOURS (default, saved in startup-config) | CR14-BUSINESS-HOURS (deny all) | shutdown | Contractor Wi-Fi unavailable |
+| AFTER-HOURS | CR14-AFTER-HOURS (limited internet) | no shutdown | DNS, web and ping to the internet only; no internal access |
+
+Two independent controls (ACL and AP port) are used together, and the default state is fail-closed.
+
+## ACLs
+
+```
+ip access-list extended CR14-AFTER-HOURS
+ permit udp any host 255.255.255.255 eq 67
+ permit udp any host 10.34.50.10 eq 67
+ deny ip any 10.34.0.0 0.0.255.255
+ deny ip any 203.0.113.0 0.0.0.3
+ permit udp any any eq 53
+ permit tcp any any eq 80
+ permit tcp any any eq 443
+ permit icmp any any echo
+ deny ip any any
+
+ip access-list extended CR14-BUSINESS-HOURS
+ deny ip any any
+```
+
+## Switching between states
+
+`config/cr14-after-hours.txt`
+
+```
+! Router0
+configure terminal
+interface g0/0.70
+ ip access-group CR14-AFTER-HOURS in
+end
+! Switch0
+configure terminal
+interface f0/6
+ no shutdown
+end
+```
+
+`config/cr14-business-hours.txt`
+
+```
+! Router0
+configure terminal
+interface g0/0.70
+ ip access-group CR14-BUSINESS-HOURS in
+end
+! Switch0
+configure terminal
+interface f0/6
+ shutdown
+end
+```
+
+Verify with `show ip interface g0/0.70` (inbound access list) and `show ip access-lists` (match counters).
+
+## Limitation
+
+Enforcement of the schedule is procedural: an administrator must run the scripts at the start and end of the after-hours period. On production IOS the same ACL names could be driven by `time-range` or `kron` without changing the rest of the design.
